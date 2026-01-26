@@ -1,8 +1,7 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import KakaoProvider from "next-auth/providers/kakao";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
+// import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
-
 import bcrypt from "bcrypt";
 import CredentialsProvider from "next-auth/providers/credentials";
 const kakaoClientId = process.env.KAKAO_CLIENT_ID;
@@ -16,7 +15,7 @@ if (!kakaoClientId || !kakaoClientSecret) {
 export const runtime = "nodejs";
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
+  // adapter: PrismaAdapter(prisma),
   providers: [
     KakaoProvider({
       clientId: kakaoClientId,
