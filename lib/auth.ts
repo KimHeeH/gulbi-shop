@@ -32,19 +32,28 @@ export const authOptions: NextAuthOptions = {
         if (!credentials?.email || !credentials?.password) {
           throw new Error("이메일과 비밀번호를 입력해주세요");
         }
+
         const user = await prisma.user.findUnique({
           where: { email: credentials.email },
         });
-        if (!user || !user.password) {
-          throw new Error("존재하지 않는 계정입니다.");
-        }
+
+        // ⚠️ 보안: 계정 존재 여부를 노출하지 않기 위해 통일된 에러 메시지 사용
+        // 사용자가 존재하지 않거나 비밀번호가 없거나 비밀번호가 틀린 경우 모두 동일한 메시지 반환
+        // 타이밍 공격 방지를 위해 항상 bcrypt.compare를 실행
+        const dummyHash =
+          "$2b$10$dummyHashForTimingAttackPrevention1234567890123456789012";
+        const userPasswordHash = user?.password || dummyHash;
+
         const isPasswordMatch = await bcrypt.compare(
           credentials.password,
-          user.password
+          userPasswordHash
         );
-        if (!isPasswordMatch) {
-          throw new Error("비밀번호가 일치하지 않습니다.");
+
+        // 사용자가 없거나 비밀번호가 틀린 경우 동일한 에러 메시지 반환
+        if (!user || !user.password || !isPasswordMatch) {
+          throw new Error("이메일 또는 비밀번호가 일치하지 않습니다.");
         }
+
         return {
           id: String(user.id),
           email: user.email,

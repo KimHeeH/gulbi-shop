@@ -65,7 +65,7 @@ export default function AdminProductPage() {
           method: "POST",
           body: formData, // FormData를 사용하면 Content-Type은 자동으로 설정됩니다.
         });
-        console.log(uploadResponse);
+        // ⚠️ 보안: 업로드 응답 정보는 민감할 수 있으므로 로깅하지 않습니다
         if (!uploadResponse.ok) {
           const errorData = await uploadResponse.json();
           throw new Error(errorData.message || "이미지 업로드 실패");

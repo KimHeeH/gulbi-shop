@@ -9,11 +9,9 @@ export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const token = await getToken({ req: request, secret });
 
-  console.log("=========================================");
-  console.log("요청 경로:", pathname);
-  console.log("읽어온 토큰:", token); // 토큰 전체 내용 확인
-  console.log("토큰 Role:", token?.role); // 토큰에 'admin'이 제대로 있는지 확인
-  console.log("=========================================");
+  // ⚠️ 보안: 프로덕션에서는 토큰 정보를 절대 로깅하지 않습니다
+  // 개발 환경에서만 디버깅이 필요한 경우 process.env.NODE_ENV === 'development' 조건을 사용하세요
+
   const isProtectedPage =
     pathname.startsWith("/admin") ||
     pathname.startsWith("/cart") ||
@@ -23,12 +21,12 @@ export async function middleware(request: NextRequest) {
   }
   if (pathname.startsWith("/admin")) {
     if (!token || token.role !== "Admin") {
-      console.log("접근 거부: 리다이렉트 실행");
+      // 보안: 접근 거부 로그도 프로덕션에서는 제거
       const url = request.nextUrl.clone();
       url.pathname = "/";
       return NextResponse.redirect(url);
     }
-    console.log("접근 허용: 관리자 접근 통과");
+    // 보안: 접근 허용 로그도 프로덕션에서는 제거
   }
 
   return NextResponse.next();

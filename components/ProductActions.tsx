@@ -21,7 +21,7 @@ export default function ProductActions({
 
   const handleIncrease = () => setQuantity((prev) => prev + 1);
   const handleDecrease = () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
-  console.log(isLoggedIn);
+  // ⚠️ 보안: 로그인 상태는 민감 정보이므로 로깅하지 않습니다
   const handleBuyNow = () => {
     if (!isLoggedIn) {
       alert("로그인이 필요합니다.");

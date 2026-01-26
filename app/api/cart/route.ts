@@ -19,18 +19,72 @@ export async function POST(req: Request) {
 
     const { productId, quantity } = await req.json();
 
+    // ⚠️ 보안: 입력값 검증 추가
+    if (
+      !productId ||
+      (typeof productId !== "number" && isNaN(Number(productId)))
+    ) {
+      return NextResponse.json(
+        { message: "유효하지 않은 상품 ID입니다." },
+        { status: 400 }
+      );
+    }
+
+    if (
+      !quantity ||
+      (typeof quantity !== "number" && isNaN(Number(quantity)))
+    ) {
+      return NextResponse.json(
+        { message: "유효하지 않은 수량입니다." },
+        { status: 400 }
+      );
+    }
+
+    const parsedProductId = Number(productId);
+    const parsedQuantity = Number(quantity);
+
+    // 수량이 양수인지 확인
+    if (parsedQuantity <= 0 || parsedQuantity > 999) {
+      return NextResponse.json(
+        { message: "수량은 1개 이상 999개 이하여야 합니다." },
+        { status: 400 }
+      );
+    }
+
+    // 상품이 실제로 존재하는지 확인
+    const productExists = await prisma.product.findUnique({
+      where: { id: parsedProductId },
+      select: { id: true }, // 존재 여부만 확인
+    });
+
+    if (!productExists) {
+      return NextResponse.json(
+        { message: "존재하지 않는 상품입니다." },
+        { status: 404 }
+      );
+    }
+
     // 3. 중복 확인 (userId 컬럼에 이제 이메일이 들어갑니다)
     const existingItem = await prisma.cartItem.findFirst({
       where: {
         userId: userId,
-        productId: Number(productId),
+        productId: parsedProductId,
       },
     });
 
     if (existingItem) {
+      // 기존 수량과 새 수량의 합이 999를 초과하지 않도록 검증
+      const newQuantity = existingItem.quantity + parsedQuantity;
+      if (newQuantity > 999) {
+        return NextResponse.json(
+          { message: "장바구니 수량은 999개를 초과할 수 없습니다." },
+          { status: 400 }
+        );
+      }
+
       const updatedItem = await prisma.cartItem.update({
         where: { id: existingItem.id },
-        data: { quantity: existingItem.quantity + Number(quantity) },
+        data: { quantity: newQuantity },
       });
       return NextResponse.json(updatedItem);
     }
@@ -39,8 +93,8 @@ export async function POST(req: Request) {
     const newItem = await prisma.cartItem.create({
       data: {
         userId: userId,
-        productId: Number(productId),
-        quantity: Number(quantity),
+        productId: parsedProductId,
+        quantity: parsedQuantity,
       },
     });
 

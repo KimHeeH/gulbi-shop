@@ -106,8 +106,7 @@ export async function fetchOrderItem() {
 }
 export async function fetchMyOrderItem(userId: string) {
   try {
-    // 1. userId가 제대로 들어오는지 확인 (디버깅용)
-    console.log("Fetching orders for user:", userId);
+    // ⚠️ 보안: 사용자 ID와 주문 정보는 민감 정보이므로 로깅하지 않습니다
 
     const orders = await prisma.order.findMany({
       where: {
@@ -125,15 +124,14 @@ export async function fetchMyOrderItem(userId: string) {
       },
     });
 
-    // 2. 결과 확인
-    console.log("Orders found:", orders.length);
+    // ⚠️ 보안: 주문 개수도 민감 정보이므로 로깅하지 않습니다
     return orders.map((order) => ({
       ...order,
       createdAt: order.createdAt.toISOString(),
     }));
   } catch (error) {
-    // 3. 어떤 에러인지 상세히 출력
-    console.error("Prisma Fetch Error:", error);
+    // 에러 로깅은 유지하되, 민감한 정보는 포함하지 않습니다
+    console.error("Prisma Fetch Error: 주문 내역 조회 중 DB 오류 발생", error);
     throw new Error("주문 내역 조회 중 DB 오류가 발생했습니다.");
   }
 }

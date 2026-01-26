@@ -17,7 +17,7 @@ export default async function ProductsPage({
   const product = await fetchGetProductData(Number(id));
   const session = await getServerSession(authOptions);
   const userId = session?.user?.id || "";
-  console.log("userId는", userId);
+  // ⚠️ 보안: 사용자 ID는 민감 정보이므로 로깅하지 않습니다
   const isLoggedIn = !!session;
   if (!product) {
     notFound();

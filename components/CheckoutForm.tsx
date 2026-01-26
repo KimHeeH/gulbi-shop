@@ -92,7 +92,7 @@ export default function CheckoutForm({
         cartItems.length > 1
           ? `${cartItems[0].product.name} 외 ${cartItems.length - 1}건`
           : cartItems[0].product.name, // 결제창에 표시될 상품명
-      amount: 100, // 총 결제 금액
+      amount: totalPrice, // ⚠️ 보안 수정: 실제 총 결제 금액 사용 (하드코딩된 100 제거)
       buyer_email: user.email || "",
       buyer_name: shippingData.name,
       buyer_tel: shippingData.phone,
@@ -128,7 +128,7 @@ export default function CheckoutForm({
           },
           cartItems
         );
-        console.log("결제 성공 데이터:", rsp);
+        // ⚠️ 보안: 결제 정보는 매우 민감한 정보이므로 절대 로깅하지 않습니다
 
         try {
           window.location.href = `/order/success/${result.orderId}`;
