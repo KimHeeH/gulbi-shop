@@ -3,7 +3,7 @@
 import { fetchAllProducts } from "@/lib/data";
 import HomeClient from "@/components/HomeClient";
 import { Product } from "@/types/product";
-
+export const revalidate = 0;
 export default async function Home() {
   let products: Product[] = [];
   let error: string | null = null;

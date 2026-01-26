@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import CartList from "@/components/CartList";
 import { CartItem } from "@/types/cart"; // 👈 이름이 명확한 타입을 가져오세요
-
+export const revalidate = 0;
 export default async function CartPage() {
   const session = await getServerSession(authOptions);
 

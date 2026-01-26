@@ -1,6 +1,6 @@
 import { fetchAllProducts } from "@/lib/data";
 import ProductCard from "@/components/ProductCard";
-
+export const revalidate = 0;
 export default async function ProductPage() {
   const products = await fetchAllProducts();
 
