@@ -16,11 +16,11 @@ export async function DELETE(req: Request) {
 
     const { cartItemId } = await req.json(); // productId(또는 cartItemId)만 받음
 
-    // 2. 삭제 실행 (세션에 저장된 kakaoId와 cartItemId가 모두 일치해야 삭제)
+    // 2. 삭제 실행 (세션에 저장된 userId와 cartItemId가 모두 일치해야 삭제)
     const deletedItem = await prisma.cartItem.deleteMany({
       where: {
         id: cartItemId,
-        userId: session.user.kakaoId, // 서버가 알고 있는 본인의 ID만 대조
+        userId: session.user.id, // 서버가 알고 있는 본인의 ID만 대조
       },
     });
 

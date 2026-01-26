@@ -16,8 +16,8 @@ export default async function ProductsPage({
 
   const product = await fetchGetProductData(Number(id));
   const session = await getServerSession(authOptions);
-  const userId = session?.user?.kakaoId || "";
-  console.log("useId는", userId);
+  const userId = session?.user?.id || "";
+  console.log("userId는", userId);
   const isLoggedIn = !!session;
   if (!product) {
     notFound();
