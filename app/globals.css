@@ -1,5 +1,6 @@
-@import "tailwindcss";
-
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -23,4 +24,46 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+/* globals.css에 추가 */
+/* Swiper Navigation Custom */
+.swiper-button-next,
+.swiper-button-prev {
+  color: #ffffff !important; /* 원하는 색 */
+  width: 45px !important;
+  height: 40px !important;
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 20px !important;
+  font-weight: 900 !important;
+}
+
+/* 가운데 슬라이드를 크게 보이도록 하는 Tailwind 스타일 */
+@layer utilities {
+  .main-banner-swiper .swiper-slide {
+    @apply transition-all duration-300 ease-in-out opacity-70 scale-[0.85];
+  }
+
+  .main-banner-swiper .swiper-slide-active {
+    @apply opacity-100 scale-125 z-10;
+  }
+
+  .main-banner-swiper .swiper-slide-prev,
+  .main-banner-swiper .swiper-slide-next {
+    @apply opacity-80 scale-90;
+  }
+}
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out forwards;
 }
