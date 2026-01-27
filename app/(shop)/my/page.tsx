@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { LogOut, ShoppingBag, UserMinus, ChevronRight } from "lucide-react";
 import LogoutButton from "@/components/LogoutButton";
 import Link from "next/link";
-
+export const revalidate = 0;
 export default async function MyPage() {
   const session = await getServerSession(authOptions);
   if (!session) {

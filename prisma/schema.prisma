@@ -30,7 +30,7 @@ model User {
 
 model Product {
   // 1. 상품 고유 식별자
-  id        Int      @id @default(autoincrement())
+  id        Int      @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

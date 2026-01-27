@@ -1,134 +1,128 @@
 import { fetchOrderItem, OrderWithItems } from "@/lib/data";
 import BackButton from "@/components/BackButton";
+
 export default async function MyOrderPage() {
   const orders: OrderWithItems[] = await fetchOrderItem();
 
   if (!orders || orders.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
-        <div className="text-gray-300 mb-4 text-6xl">📦</div>
-        <h1 className="text-2xl font-bold text-gray-800">
-          현재 접수된 주문이 없습니다.
+      <div className="flex flex-col items-center justify-center min-h-[60vh] bg-white text-center">
+        <div className="text-gray-200 text-7xl mb-4">📄</div>
+        <h1 className="text-xl font-medium text-gray-500">
+          접수된 주문 내역이 없습니다.
         </h1>
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6 md:p-12 min-h-screen bg-gray-50/30">
-      <header className="flex justify-between items-end mb-10 border-b-2 border-gray-100 pb-8">
-        <div>
-          <BackButton />
-        </div>
-        <div>
-          <h1 className="text-3xl font-black text-gray-900 tracking-tight">
-            주문 관리 시스템
-          </h1>
-          <p className="text-gray-500 mt-2 font-medium">
-            전체 주문 및 결제 현황을 관리합니다.
-          </p>
-        </div>
-        <div className="text-right">
-          <span className="inline-flex items-center px-4 py-1.5 rounded-full text-sm font-bold bg-indigo-50 text-indigo-600 border border-indigo-100">
-            총 {orders.length}건
-          </span>
-        </div>
-      </header>
+    <div className="min-h-screen bg-white text-gray-900">
+      <main className="max-w-7xl mx-auto px-4 py-10 md:py-16">
+        {/* 헤더 섹션: 더 담백하게 */}
+        <header className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+          <div className="space-y-4">
+            <BackButton />
+            <h1 className="text-4xl font-black tracking-tight">
+              주문 내역 관리
+            </h1>
+          </div>
+          <div className="bg-gray-50 px-6 py-3 rounded-lg border border-gray-100">
+            <span className="text-sm text-gray-500 mr-2">총 주문 건수</span>
+            <span className="text-xl font-bold">{orders.length}</span>
+          </div>
+        </header>
 
-      <div className="space-y-8">
-        {orders.map((order) => (
-          <div
-            key={order.id}
-            className="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden transition-all duration-300 hover:shadow-xl"
-          >
-            {/* 1. 상단 헤더 (주문번호/일시) */}
-            <div className="bg-gray-50/80 px-6 py-4 flex justify-between items-center border-b">
-              <div className="flex items-center gap-3">
-                <span className="px-2 py-0.5 bg-gray-200 text-gray-600 text-[10px] font-bold rounded uppercase">
-                  No.
-                </span>
-                <span className="font-mono text-sm font-bold text-gray-800">
-                  {order.merchant_uid}
-                </span>
-              </div>
-              <div className="text-sm text-gray-500 italic">
-                {new Date(order.createdAt).toLocaleString("ko-KR")}
-              </div>
-            </div>
-
-            {/* 2. 카드 본문 */}
-            <div className="p-6">
-              <div className="grid md:grid-cols-2 gap-8">
-                {/* 왼쪽: 구매자 및 상품 정보 */}
-                <div className="space-y-6">
-                  {/* 구매자 정보 */}
-                  <div>
-                    <h3 className="text-xs font-bold text-indigo-500 uppercase tracking-widest mb-2 text-left">
-                      구매자 정보
-                    </h3>
-                    <div className="flex items-center gap-2">
-                      <span className="text-gray-900 font-black text-lg">
-                        {order.buyerName}
+        {/* 엑셀 스타일 테이블 */}
+        <div className="overflow-x-auto border-t-2 border-black">
+          <table className="w-full border-collapse min-w-[1000px]">
+            <thead>
+              <tr className="bg-gray-50 text-left text-xs uppercase tracking-wider text-gray-500 border-b">
+                <th className="px-6 py-4 font-bold">주문번호 / 일시</th>
+                <th className="px-6 py-4 font-bold">주문자 정보</th>
+                <th className="px-6 py-4 font-bold">상품 상세</th>
+                <th className="px-6 py-4 font-bold">결제 상태</th>
+                <th className="px-6 py-4 font-bold text-right">
+                  최종 결제금액
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {orders.map((order) => (
+                <tr
+                  key={order.id}
+                  className="hover:bg-gray-50/50 transition-colors group"
+                >
+                  {/* 1. 주문번호 / 일시 */}
+                  <td className="px-6 py-6 vertical-top">
+                    <div className="font-mono text-base font-bold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">
+                      {order.merchant_uid}
+                    </div>
+                    <div className="text-[11px] text-gray-400">
+                      {new Date(order.createdAt).toLocaleDateString("ko-KR")}
+                      <span className="ml-1 opacity-60">
+                        {new Date(order.createdAt).toLocaleTimeString("ko-KR", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-500 mt-1">
-                      배송지: {order.address}
-                    </p>
-                    <div className="text-gray-500 text-sm">
-                      휴대폰 번호 : {order.buyerTel}
-                    </div>
-                  </div>
+                  </td>
 
-                  {/* ★ 상품 목록 정보 추가 ★ */}
-                  <div>
-                    <h3 className="text-xs font-bold text-orange-500 uppercase tracking-widest mb-3 text-left">
-                      주문 상품 상세
-                    </h3>
-                    <div className="bg-orange-50/50 rounded-xl border border-orange-100 p-3 space-y-2">
-                      {order.orderItems.map((item, index) => (
+                  {/* 2. 주문자 정보 */}
+                  <td className="px-6 py-6">
+                    <div className="font-bold text-gray-900">
+                      {order.buyerName}
+                    </div>
+                    <div className="text-base text-gray-500 mt-1 leading-relaxed">
+                      {order.buyerTel}
+                      <br />
+                      <span className="text-gray-400 line-clamp-1">
+                        {order.address}
+                      </span>
+                    </div>
+                  </td>
+
+                  {/* 3. 상품 상세: 여러 항목이 있을 경우 리스트로 */}
+                  <td className="px-6 py-6">
+                    <div className="space-y-1">
+                      {order.orderItems.map((item, idx) => (
                         <div
-                          key={index}
-                          className="flex justify-between items-center text-sm"
+                          key={idx}
+                          className="text-sm flex items-center gap-2"
                         >
-                          <span className="text-gray-700 font-medium">
-                            {/* 상품 모델에 name 필드가 있다고 가정합니다. 없다면 item.productId 등으로 수정하세요. */}
-                            {item.product.name || "상품명 정보 없음"}
-                            {item.product.weight || "상품 무게 정보 없음"}
+                          <span className="text-gray-900 font-medium">
+                            {item.product.name}
                           </span>
-                          <span className="text-gray-500 text-sm font-bold">
+                          <span className="text-[11px] text-gray-400 px-1.5 py-0.5 bg-gray-100 rounded">
                             {item.quantity}개
                           </span>
                         </div>
                       ))}
                     </div>
-                  </div>
-                </div>
+                  </td>
 
-                {/* 오른쪽: 결제 요약 */}
-                <div className="flex flex-col justify-center items-end bg-slate-50 p-6 rounded-2xl border border-gray-100">
-                  <span className="text-xs font-bold px-2 py-1 bg-green-100 text-green-700 rounded mb-4">
-                    결제 완료
-                  </span>
-                  <div className="text-right">
-                    <p className="text-gray-400 text-xs font-bold mb-1 uppercase tracking-tighter">
-                      총 가격
-                    </p>
-                    <p className="text-3xl font-black text-black">
+                  {/* 4. 결제 상태 */}
+                  <td className="px-6 py-6">
+                    <span className="inline-flex items-center px-2.5 py-1 rounded text-[11px] font-bold bg-gray-900 text-white">
+                      결제완료
+                    </span>
+                  </td>
+
+                  {/* 5. 최종 금액 */}
+                  <td className="px-6 py-6 text-right">
+                    <div className="text-lg font-black text-gray-900">
                       {order.totalPrice.toLocaleString()}
-                      <span className="text-lg ml-1 font-bold text-gray-900">
-                        원
-                      </span>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+                      <span className="text-base ml-1 font-normal">원</span>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-            {/* 3. 하단 장식선 또는 버튼 */}
-            <div className="h-1 bg-gradient-to-r from-transparent via-indigo-100 to-transparent" />
-          </div>
-        ))}
-      </div>
+        {/* 하단 푸터 가이드 */}
+      </main>
     </div>
   );
 }

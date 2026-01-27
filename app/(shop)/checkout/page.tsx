@@ -1,75 +1,72 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { fetchGetProductData } from "@/lib/data";
+import { fetchGetCartItem, fetchGetProductData } from "@/lib/data";
 import CheckoutForm from "@/components/CheckoutForm";
 import Image from "next/image";
 import Script from "next/script";
 import { CartItem } from "@/types/cart";
 
-// 바로구매하기를 위한 체크아웃 페이지
-export default async function CheckoutPage({
+export default async function IntegratedCheckoutPage({
   searchParams,
 }: {
-  searchParams: { id?: string; quantity?: string };
+  searchParams: Promise<{ id?: string; quantity?: string }>;
 }) {
-  // 1. 서버 세션 확인 (로그인 여부)
   const session = await getServerSession(authOptions);
-
-  // 2. 로그인 안되어 있으면 로그인 페이지로 리다이렉트
   if (!session || !session.user) {
     redirect("/login?callbackUrl=/checkout");
   }
 
-  // 3. query parameter에서 상품 ID와 수량 가져오기
-  const productId = searchParams.id;
-  const quantity = searchParams.quantity ? parseInt(searchParams.quantity) : 1;
+  const params = await searchParams;
+  const productId = params.id;
+  const quantity = params.quantity ? parseInt(params.quantity) : 1;
 
-  // 4. 상품 ID가 없으면 에러 처리
-  if (!productId || isNaN(Number(productId))) {
-    redirect("/products");
+  let checkoutItems: CartItem[] = [];
+
+  // --- 1. 데이터 준비 (분기 처리) ---
+  if (productId) {
+    // [바로 구매하기] 로직
+    const product = await fetchGetProductData(Number(productId));
+    if (!product) redirect("/products");
+
+    checkoutItems = [
+      {
+        id: 0, // 임시 ID
+        userId: session.user.id,
+        productId: product.id,
+        quantity: quantity,
+        product: {
+          ...product,
+          description: product.description || "",
+          imageUrl: product.imageUrl || "",
+          origin: product.origin || "",
+          weight: product.weight || "",
+          shippingFee: product.shippingFee || 3500,
+          shippingMethod: product.shippingMethod || "택배",
+          minOrderQty: product.minOrderQty || 1,
+        },
+      },
+    ];
+  } else {
+    // [장바구니 구매] 로직
+    const cartItems = await fetchGetCartItem(session.user.id);
+    if (!cartItems || cartItems.length === 0) {
+      redirect("/cart");
+    }
+    checkoutItems = cartItems;
   }
 
-  // 5. 수량 검증
-  if (isNaN(quantity) || quantity < 1 || quantity > 999) {
-    redirect(`/products/${productId}`);
-  }
-
-  // 6. 상품 정보 가져오기
-  const product = await fetchGetProductData(Number(productId));
-
-  // 7. 상품이 존재하지 않으면 404
-  if (!product) {
-    redirect("/products");
-  }
-
-  // 8. CartItem 형태로 변환 (CheckoutForm이 기대하는 형태)
-  const cartItem: CartItem = {
-    id: 0, // 임시 ID (실제 장바구니에 담지 않으므로)
-    userId: session.user.id,
-    productId: product.id,
-    quantity: quantity,
-    product: {
-      id: product.id,
-      name: product.name,
-      description: product.description || "",
-      imageUrl: product.imageUrl || "",
-      price: product.price,
-      origin: product.origin || "",
-      weight: product.weight || "",
-      shippingFee: product.shippingFee || 3500,
-      shippingMethod: product.shippingMethod || "택배",
-      minOrderQty: product.minOrderQty || 1,
-    },
-  };
-
-  // 9. 서버에서 금액 계산 (클라이언트보다 서버 계산이 안전함)
-  const subtotal = product.price * quantity;
-  const shippingFee = product.shippingFee || 3500; // 배송비 설정
+  // --- 2. 공통 금액 계산 ---
+  const subtotal = checkoutItems.reduce(
+    (acc, item) => acc + item.product.price * item.quantity,
+    0
+  );
+  // 가장 비싼 배송비 하나만 적용하거나 합산 (여기선 3500원 고정 예시)
+  const shippingFee = 3500;
   const totalPrice = subtotal + shippingFee;
 
   return (
-    <>
+    <div className="bg-gray-50 min-h-screen pb-20">
       <Script
         src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
         strategy="lazyOnload"
@@ -78,73 +75,124 @@ export default async function CheckoutPage({
         src="https://cdn.iamport.kr/v1/iamport.js"
         strategy="afterInteractive"
       />
-      <div className="max-w-5xl mx-auto px-4 py-5 lg:py-16">
-        <h1 className="text-3xl font-bold mb-10 text-gray-900 border-b pb-6">
-          주문서 작성
-        </h1>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-          {/* 왼쪽: 주문 상품 정보 */}
-          <div className="lg:col-span-1">
-            <div className="bg-gray-50 p-6 rounded-2xl border sticky top-24">
-              <h2 className="text-lg font-bold mb-4">주문 상품 정보</h2>
-
-              {/* 상품 정보 */}
-              <div className="space-y-4 mb-6">
-                <div className="flex gap-3 text-sm">
-                  <div className="w-16 h-16 bg-white border rounded-lg overflow-hidden flex-shrink-0 relative">
-                    <Image
-                      src={product.imageUrl || "/img/no_img.png"}
-                      alt={product.name}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="flex-grow">
-                    <p className="font-medium text-gray-800 line-clamp-1">
-                      {product.name}
-                    </p>
-                    <p className="text-gray-500">
-                      {quantity}개 /{" "}
-                      {(product.price * quantity).toLocaleString()}원
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* 최종 금액 정보 */}
-              <div className="space-y-2 border-t pt-4 text-gray-600">
-                <div className="flex justify-between">
-                  <span>상품금액</span>
-                  <span>{subtotal.toLocaleString()}원</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>배송비</span>
-                  <span>{shippingFee.toLocaleString()}원</span>
-                </div>
-                <div className="flex justify-between text-xl font-extrabold text-[#3C2F21] pt-2">
-                  <span>총 결제금액</span>
-                  <span>{totalPrice.toLocaleString()}원</span>
-                </div>
-              </div>
-
-              <p className="text-[11px] text-gray-400 mt-4 leading-tight">
-                주문 내용을 확인하였으며, 정보 제공 및 결제에 동의합니다.
-              </p>
-            </div>
-          </div>
-
-          {/* 오른쪽: 배송 정보 입력 폼 */}
-          <div className="lg:col-span-2">
-            <CheckoutForm
-              user={session.user}
-              totalPrice={totalPrice}
-              cartItems={[cartItem]}
-            />
+      {/* 헤더 영역: 로고와 단계만 깔끔하게 */}
+      <header className="bg-white border-b sticky top-0 z-50">
+        <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+          <h1 className="text-xl font-bold tracking-tight text-gray-900">
+            주문/결제
+          </h1>
+          <div className="flex items-center gap-2 text-sm font-medium">
+            <span className="text-gray-400">장바구니</span>
+            <span className="text-gray-300 text-xs">▶</span>
+            <span className="text-blue-600">주문결제</span>
+            <span className="text-gray-300 text-xs">▶</span>
+            <span className="text-gray-400">완료</span>
           </div>
         </div>
-      </div>
-    </>
+      </header>
+
+      <main className="max-w-6xl mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* 왼쪽: 입력 영역 (80% 비중) */}
+          <div className="lg:col-span-8 space-y-6">
+            {/* 1. 주문 상품 요약 섹션 */}
+            <section className="bg-white rounded-xl shadow-sm border overflow-hidden">
+              <div className="p-5 border-b bg-gray-50/50">
+                <h2 className="font-bold text-lg text-gray-800">
+                  주문 상품 ({checkoutItems.length})
+                </h2>
+              </div>
+              <div className="divide-y">
+                {checkoutItems.map((item) => (
+                  <div
+                    key={item.id || item.productId}
+                    className="p-5 flex gap-4"
+                  >
+                    <div className="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden relative border flex-shrink-0">
+                      <Image
+                        src={item.product.imageUrl || "/img/no_img.png"}
+                        alt={item.product.name}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="flex flex-col justify-center">
+                      <p className="text-sm text-gray-500 mb-1">
+                        {item.product.origin || "국내산"}
+                      </p>
+                      <h3 className="font-semibold text-gray-900 line-clamp-1">
+                        {item.product.name}
+                      </h3>
+                      <p className="text-sm text-gray-600 mt-1">
+                        {item.quantity}개 /{" "}
+                        <span className="font-bold">
+                          {(
+                            item.product.price * item.quantity
+                          ).toLocaleString()}
+                          원
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* 2. 결제 폼 (배송지 입력 등) */}
+            <section className="bg-white rounded-xl shadow-sm border">
+              <div className="p-5 border-b bg-gray-50/50">
+                <h2 className="font-bold text-lg text-gray-800">배송 정보</h2>
+              </div>
+              <div className="p-6">
+                <CheckoutForm
+                  user={session.user}
+                  totalPrice={totalPrice}
+                  cartItems={checkoutItems}
+                />
+              </div>
+            </section>
+          </div>
+
+          {/* 오른쪽: 결제 요약 (Sticky 적용) */}
+          <aside className="lg:col-span-4 sticky top-24">
+            <section className="bg-white rounded-xl shadow-md border overflow-hidden">
+              <div className="p-5 border-b">
+                <h2 className="font-bold text-lg text-gray-800">결제 금액</h2>
+              </div>
+              <div className="p-6 space-y-4">
+                <div className="flex justify-between text-gray-600">
+                  <span>총 상품금액</span>
+                  <span className="font-medium">
+                    {subtotal.toLocaleString()}원
+                  </span>
+                </div>
+                <div className="flex justify-between text-gray-600">
+                  <span>배송비</span>
+                  <span className="font-medium">
+                    +{shippingFee.toLocaleString()}원
+                  </span>
+                </div>
+
+                <div className="flex justify-between items-baseline pt-4">
+                  <span className="font-bold text-gray-900 text-lg">
+                    최종 결제금액
+                  </span>
+                  <span className="text-2xl font-black text-black-600">
+                    {totalPrice.toLocaleString()}원
+                  </span>
+                </div>
+              </div>
+            </section>
+
+            <p className="mt-4 text-[11px] text-gray-400 text-center leading-normal px-4">
+              주문 내용을 모두 확인하였으며, 정보 제공 및 결제 진행에
+              동의합니다. 결제 시 사용하시는 카드의 보안 정보를 확인하시기
+              바랍니다.
+            </p>
+          </aside>
+        </div>
+      </main>
+    </div>
   );
 }
-

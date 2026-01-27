@@ -1,61 +1,78 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { fetchGetCartItem } from "@/lib/data";
-import { redirect } from "next/navigation";
 import Link from "next/link";
 import CartList from "@/components/CartList";
-import { CartItem } from "@/types/cart"; // 👈 이름이 명확한 타입을 가져오세요
+
 export const revalidate = 0;
+
 export default async function CartPage() {
   const session = await getServerSession(authOptions);
 
-  // 1. 로그인 여부만 먼저 체크 (어떤 방식이든 세션이 있으면 통과)
   if (!session || !session.user) {
     return (
-      <div className="flex flex-col items-center justify-center py-20">
-        <p className="mb-4">로그인이 필요한 페이지입니다.</p>
-        <Link
-          href="/login"
-          className="px-4 py-2 bg-blue-500 text-white rounded"
-        >
-          로그인하러 가기
-        </Link>
+      <div className="min-h-[60vh] flex flex-col items-center justify-center bg-gray-50">
+        <div className="bg-white p-10 rounded-3xl shadow-sm border text-center">
+          <p className="text-gray-500 mb-6 text-lg">
+            로그인이 필요한 페이지입니다.
+          </p>
+          <Link
+            href="/login"
+            className="inline-block px-8 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-all"
+          >
+            로그인하러 가기
+          </Link>
+        </div>
       </div>
     );
   }
 
-  // 2. 식별자 가져오기 (카카오면 kakaoId, 이메일이면 id나 email)
-  // session.user.id 가 공통 식별자로 정의되어 있다면 그걸 쓰는 게 가장 좋습니다.
   const userId = session.user.id;
-
-  if (!userId) {
-    return <div>사용자 식별 정보를 찾을 수 없습니다.</div>;
-  }
-
-  // 3. fetch 함수에 식별자 전달
   const cartItems = await fetchGetCartItem(userId);
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-16">
-      <h1 className="text-3xl font-bold mb-10 text-gray-900 border-b pb-6">
-        장바구니
-      </h1>
-      {cartItems.length === 0 ? (
-        <div className="text-center py-20 bg-gray-50 rounded-2xl border border-dashed">
-          <p className="text-gray-500 mb-6 text-lg">
-            장바구니가 비어 있습니다.
+    <div className="bg-gray-50 min-h-screen pb-20">
+      <div className="max-w-6xl mx-auto px-4 py-12">
+        <header className="mb-10">
+          <h1 className="text-3xl font-black text-gray-900 tracking-tight">
+            장바구니
+          </h1>
+          <p className="text-gray-500 mt-2">
+            담아두신 상품을 확인하고 주문을 진행해 주세요.
           </p>
-          <Link
-            href="/products"
-            className="bg-[#3C2F21] text-white px-8 py-3 rounded-lg font-medium hover:bg-black transition-colors"
-          >
-            쇼핑하러 가기
-          </Link>
-        </div>
-      ) : (
-        // 여기에 데이터를 넘겨줍니다.
-        <CartList initialItems={cartItems} />
-      )}
+        </header>
+
+        {cartItems.length === 0 ? (
+          <div className="text-center py-32 bg-white rounded-3xl border border-dashed border-gray-300">
+            <div className="bg-gray-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg
+                className="w-10 h-10 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                />
+              </svg>
+            </div>
+            <p className="text-gray-500 mb-8 text-xl font-medium">
+              장바구니가 비어 있습니다.
+            </p>
+            <Link
+              href="/products"
+              className="bg-gray-900 text-white px-10 py-4 rounded-2xl font-bold hover:bg-black transition-all shadow-lg shadow-gray-200"
+            >
+              인기 상품 보러가기
+            </Link>
+          </div>
+        ) : (
+          <CartList initialItems={cartItems} />
+        )}
+      </div>
     </div>
   );
 }

@@ -11,8 +11,14 @@ export default function AdminDashboardPage() {
       icon: "/icons/shopping-bag.svg",
     },
     {
+      key: "register-products",
+      label: "상품 등록",
+      href: "/admin/products/register",
+      icon: "/icons/product.svg",
+    },
+    {
       key: "products",
-      label: "상품 관리",
+      label: "상품 목록",
       href: "/admin/products",
       icon: "/icons/product.svg",
     },
@@ -126,7 +132,7 @@ export default function AdminDashboardPage() {
                 <span className="text-sm text-gray-500">→</span>
               </Link>
               <Link
-                href="/admin/products"
+                href="/admin/register/products"
                 className="flex items-center justify-between rounded-lg border border-gray-200 bg-white px-5 py-4 hover:shadow-md transition-shadow"
               >
                 <div>

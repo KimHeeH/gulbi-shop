@@ -39,7 +39,6 @@ export default function ProductActions({
       return;
     }
 
-    // ★ 수정된 부분: userId를 보내지 않고 productId와 현재 선택된 quantity만 보냅니다.
     const res = await fetch("/api/cart", {
       method: "POST",
       headers: {
@@ -47,7 +46,7 @@ export default function ProductActions({
       },
       body: JSON.stringify({
         productId: productId,
-        quantity: quantity, // 사용자가 조절한 수량 반영
+        quantity: quantity,
       }),
     });
 
