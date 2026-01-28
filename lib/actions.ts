@@ -18,7 +18,7 @@ interface ShippingData {
 
 // 3. 장바구니 아이템 타입 (현재 프로젝트의 Product 구조에 맞춰 조정하세요)
 interface CartItem {
-  productId: number;
+  productId: string;
   quantity: number;
   product: {
     price: number;
