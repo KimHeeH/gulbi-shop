@@ -46,7 +46,7 @@ export const config = {
     "/cart/:path*", // 장바구니 및 하위 경로
     "/checkout/:path*", // 결제 페이지 및 하위 경로
     "/order/:path*",
-    "my/orders/:path*", // 내 주문 내역 페이지 (파일명이 이렇다면 추가)
+    "/my/orders/:path*", // 내 주문 내역 페이지 (파일명이 이렇다면 추가)
 
     /*
      * 3. 로그인/회원가입 페이지
