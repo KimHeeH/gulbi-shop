@@ -68,7 +68,6 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async jwt({ token, account, user }) {
-      // 1. 최초 로그인 시 (카카오 혹은 Credentials)
       if (account && user) {
         if (account.provider === "kakao") {
           const kakaoId = String(account.providerAccountId);
@@ -89,10 +88,9 @@ export const authOptions: NextAuthOptions = {
           });
 
           token.id = dbUser.id;
-          token.role = dbUser.role; // DB에서 가져온 role 주입
+          token.role = dbUser.role;
           token.kakaoId = kakaoId;
         } else {
-          // Credentials 로그인 시
           token.id = user.id;
           token.role = user.role;
         }
@@ -103,8 +101,7 @@ export const authOptions: NextAuthOptions = {
 
     async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id as string; // 아까 빌드 에러 해결을 위해 꼭 필요!
-        // ✅ kakaoId는 카카오 로그인일 때만 존재할 수 있으므로 undefined 안전 처리
+        session.user.id = token.id as string;
         session.user.kakaoId = token.kakaoId
           ? String(token.kakaoId)
           : undefined;
@@ -112,15 +109,8 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
-    async redirect({ url, baseUrl, user }) {
-      // User 타입을 확장하여 role이 있음을 알려줍니다.
-      const adminUser = user as User & { role?: string };
 
-      if (adminUser.role === "Admin") {
-        return `${baseUrl}/admin/dashboard`;
-      }
-
-      // 기본 리다이렉트 로직: 로그인 후 이전 페이지로 보내주려면 url을 활용
+    async redirect({ url, baseUrl }) {
       if (url.startsWith(baseUrl)) return url;
       return baseUrl;
     },
