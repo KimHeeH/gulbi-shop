@@ -26,7 +26,7 @@ export default async function IntegratedCheckoutPage({
   // --- 1. 데이터 준비 (분기 처리) ---
   if (productId) {
     // [바로 구매하기] 로직
-    const product = await fetchGetProductData(Number(productId));
+    const product = await fetchGetProductData(productId);
     if (!product) redirect("/products");
 
     checkoutItems = [

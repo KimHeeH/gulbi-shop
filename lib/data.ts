@@ -31,7 +31,7 @@ export async function fetchAllProducts() {
     throw new Error("Failed to fetch product data.");
   }
 }
-export async function fetchGetProductData(id: number) {
+export async function fetchGetProductData(id: string) {
   return await prisma.product.findUnique({ where: { id } });
 }
 export async function fetchGetCartItem(userId: string) {
