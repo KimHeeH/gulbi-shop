@@ -50,7 +50,7 @@ export default function LoginPage() {
     try {
       // 일단 메인으로 보냅니다.
       // 어드민 리다이렉트는 middleware.ts에서 처리하게 두는 것이 가장 안전합니다.
-      await signIn("kakao");
+      await signIn("kakao", { redirect: true });
     } catch {
       setLoginErrorMessage("일시적인 오류가 발생했습니다. 다시 시도해주세요.");
     } finally {
