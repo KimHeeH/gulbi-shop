@@ -40,7 +40,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const parsedProductId = Number(productId);
+    const parsedProductId = productId;
     const parsedQuantity = Number(quantity);
 
     // 수량이 양수인지 확인

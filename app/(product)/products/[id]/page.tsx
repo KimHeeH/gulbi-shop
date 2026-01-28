@@ -13,7 +13,7 @@ export default async function ProductsPage({
   params: { id: string };
 }) {
   const { id } = await params;
-  const product = await fetchGetProductData(Number(id));
+  const product = await fetchGetProductData(id);
   const session = await getServerSession(authOptions);
 
   const isLoggedIn = !!session;
@@ -81,7 +81,7 @@ export default async function ProductsPage({
             <div className="mt-auto pt-8 border-t border-gray-100">
               <ProductActions
                 product={product}
-                productId={Number(id)}
+                productId={id}
                 isLoggedIn={isLoggedIn}
               />
             </div>

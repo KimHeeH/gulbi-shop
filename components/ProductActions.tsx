@@ -9,7 +9,7 @@ export default function ProductActions({
   isLoggedIn,
   product,
 }: {
-  productId: number;
+  productId: string;
   isLoggedIn: boolean;
   product: Product;
 }) {
