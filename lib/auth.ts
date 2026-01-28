@@ -4,6 +4,7 @@ import KakaoProvider from "next-auth/providers/kakao";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcrypt";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { User } from "next-auth";
 const kakaoClientId = process.env.KAKAO_CLIENT_ID;
 const kakaoClientSecret = process.env.KAKAO_CLIENT_SECRET;
 
@@ -110,6 +111,18 @@ export const authOptions: NextAuthOptions = {
         session.user.role = token.role;
       }
       return session;
+    },
+    async redirect({ url, baseUrl, user }) {
+      // User 타입을 확장하여 role이 있음을 알려줍니다.
+      const adminUser = user as User & { role?: string };
+
+      if (adminUser.role === "Admin") {
+        return `${baseUrl}/admin/dashboard`;
+      }
+
+      // 기본 리다이렉트 로직: 로그인 후 이전 페이지로 보내주려면 url을 활용
+      if (url.startsWith(baseUrl)) return url;
+      return baseUrl;
     },
   },
 };

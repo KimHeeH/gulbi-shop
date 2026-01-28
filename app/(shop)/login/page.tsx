@@ -5,13 +5,13 @@ import { signIn } from "next-auth/react";
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-
+import { useSession } from "next-auth/react";
 export default function LoginPage() {
   const router = useRouter();
   const [isKakaoLoading, setIsKakaoLoading] = useState(false);
   const [isEmailLoading, setIsEmailLoading] = useState(false);
   const [loginErrorMessage, setLoginErrorMessage] = useState("");
-
+  const { data: session } = useSession();
   // 입력값 상태 관리
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -48,7 +48,9 @@ export default function LoginPage() {
     setLoginErrorMessage("");
     setIsKakaoLoading(true);
     try {
-      await signIn("kakao", { callbackUrl: "/" });
+      await signIn("kakao", {
+        callbackUrl: session?.user?.role === "Admin" ? "/admin/dashboard" : "/",
+      });
     } catch {
       setLoginErrorMessage("일시적인 오류가 발생했습니다. 다시 시도해주세요.");
     } finally {
