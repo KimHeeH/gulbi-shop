@@ -5,52 +5,45 @@ import { getToken } from "next-auth/jwt";
 
 const secret = process.env.NEXTAUTH_SECRET;
 
+// middleware.ts
 export async function middleware(request: NextRequest) {
-  const pathname = request.nextUrl.pathname;
+  const { pathname } = request.nextUrl;
+
+  // 1. 로그인 페이지 자체는 미들웨어 로직을 타지 않게 즉시 통과시킵니다.
+  if (pathname === "/login") {
+    return NextResponse.next();
+  }
+
   const token = await getToken({ req: request, secret });
 
+  // 2. 어드민 체크 (가장 먼저 수행)
+  if (pathname === "/" && token?.role === "Admin") {
+    return NextResponse.redirect(new URL("/admin/dashboard", request.url));
+  }
+
+  // 3. 보호된 페이지 체크
   const isProtectedPage =
     pathname.startsWith("/admin") ||
     pathname.startsWith("/cart") ||
     pathname.startsWith("/checkout");
+
   if (isProtectedPage && !token) {
+    // 여기서 /login으로 보낼 때, 원래 가려던 주소를 남겨두면 나중에 편리합니다.
     return NextResponse.redirect(new URL("/login", request.url));
-  }
-  if (pathname === "/" && token?.role === "Admin") {
-    return NextResponse.redirect(new URL("/admin/dashboard", request.url));
-  }
-  if (pathname.startsWith("/admin")) {
-    if (!token || token.role !== "Admin") {
-      const url = request.nextUrl.clone();
-      url.pathname = "/";
-      return NextResponse.redirect(url);
-    }
   }
 
   return NextResponse.next();
 }
-
-// 💡 config 객체는 선택 사항이지만, 일반적으로 함께 export 됩니다.
+// middleware.ts 의 config 부분
 export const config = {
   matcher: [
     /*
-     * 1. 관리자 전용 페이지 (전체 보호)
-     * /admin, /admin/products, /admin/orders 등 모든 하위 경로 포함
+     * 아래 경로를 제외한 모든 요청에 미들웨어 적용:
+     * 1. api (API 라우트)
+     * 2. _next/static (정적 파일)
+     * 3. _next/image (이미지 최적화 파일)
+     * 4. favicon.ico (파비콘)
      */
-    "/admin/:path*",
-
-    /*
-     * 2. 일반 유저 필수 보호 페이지
-     * 로그인을 안 한 상태로 접근하면 /login으로 보내야 하는 곳들
-     */
-    "/cart/:path*", // 장바구니 및 하위 경로
-    "/checkout/:path*", // 결제 페이지 및 하위 경로
-    "/order/:path*",
-    "/my/orders/:path*", // 내 주문 내역 페이지 (파일명이 이렇다면 추가)
-
-    /*
-     * 3. 로그인/회원가입 페이지
-     * 이미 로그인한 유저가 접속했을 때 메인으로 튕겨내기 위해 감시 대상에 포함
-     */
+    "/((?!api|_next/static|_next/image|favicon.ico).*)",
   ],
 };

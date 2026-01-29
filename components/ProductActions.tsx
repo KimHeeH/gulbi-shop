@@ -2,7 +2,7 @@
 import { Product } from "@/types/product";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { ShoppingCart, X, ChevronDown, Check } from "lucide-react";
+import { X, ChevronDown, Check } from "lucide-react";
 
 export default function ProductActions({
   productId,

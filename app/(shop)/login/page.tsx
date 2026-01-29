@@ -5,13 +5,11 @@ import { signIn } from "next-auth/react";
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
 export default function LoginPage() {
   const router = useRouter();
   const [isKakaoLoading, setIsKakaoLoading] = useState(false);
   const [isEmailLoading, setIsEmailLoading] = useState(false);
   const [loginErrorMessage, setLoginErrorMessage] = useState("");
-  const { data: session } = useSession();
   // 입력값 상태 관리
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -36,7 +34,7 @@ export default function LoginPage() {
         router.push("/"); // 성공 시 메인으로 이동
         router.refresh();
       }
-    } catch (error) {
+    } catch {
       setLoginErrorMessage("로그인 도중 오류가 발생했습니다.");
     } finally {
       setIsEmailLoading(false);
@@ -48,8 +46,6 @@ export default function LoginPage() {
     setLoginErrorMessage("");
     setIsKakaoLoading(true);
     try {
-      // 일단 메인으로 보냅니다.
-      // 어드민 리다이렉트는 middleware.ts에서 처리하게 두는 것이 가장 안전합니다.
       await signIn("kakao", { redirect: true });
     } catch {
       setLoginErrorMessage("일시적인 오류가 발생했습니다. 다시 시도해주세요.");

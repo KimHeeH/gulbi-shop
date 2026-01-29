@@ -4,7 +4,6 @@ import KakaoProvider from "next-auth/providers/kakao";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcrypt";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { User } from "next-auth";
 const kakaoClientId = process.env.KAKAO_CLIENT_ID;
 const kakaoClientSecret = process.env.KAKAO_CLIENT_SECRET;
 
@@ -13,7 +12,6 @@ if (!kakaoClientId || !kakaoClientSecret) {
     "KAKAO_CLIENT_ID 또는 KAKAO_CLIENT_SECRET 환경 변수가 설정되지 않았습니다."
   );
 }
-export const runtime = "nodejs";
 
 export const authOptions: NextAuthOptions = {
   // adapter: PrismaAdapter(prisma),
@@ -111,8 +109,7 @@ export const authOptions: NextAuthOptions = {
     },
 
     async redirect({ url, baseUrl }) {
-      if (url.startsWith(baseUrl)) return url;
-      return baseUrl;
+      return url.startsWith(baseUrl) ? url : baseUrl;
     },
   },
 };

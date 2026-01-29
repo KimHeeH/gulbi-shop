@@ -2,11 +2,11 @@
 
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 export default function AdminProductPage() {
   const [productName, setProductName] = useState("");
   const [productInfo, setProductInfo] = useState("");
   const [productPrice, setProductPrice] = useState("");
-  const [productImage, setProductImage] = useState<File | null>(null);
   const [productOrigin, setProductOrigin] = useState("");
   const [productWeight, setProductWeight] = useState("");
   const [productImageFile, setProductImageFile] = useState<File | null>(null); // File 객체
@@ -294,7 +294,7 @@ export default function AdminProductPage() {
                   선택된 파일 미리보기:
                 </p>
                 [Image of the product image]
-                <img
+                <Image
                   src={imageUrlPreview}
                   alt="상품 이미지 미리보기"
                   className="mt-2 max-w-full h-auto max-h-60 object-contain rounded-md shadow-md"

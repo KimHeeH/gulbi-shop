@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 
 const bannerItems = [
-  { text: "🚚 5만원 이상 구매 시 전지역 무료배송", link: "/events" },
-  { text: "🎁 신규 회원가입 시 5% 할인 쿠폰 즉시 증정", link: "/login" },
+  { text: "🚚 5만원 이상 구매 시 전지역 무료배송", link: "#" },
+  { text: "🎁 신규 회원가입 시 5% 할인 쿠폰 즉시 증정", link: "#" },
 ];
 
 export default function TopBanner() {
