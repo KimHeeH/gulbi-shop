@@ -73,6 +73,7 @@ export default function AdminProductPage() {
 
         const result = await uploadResponse.json();
         finalImageUrl = result.url; // Vercel Blob에서 받은 최종 이미지 URL
+        console.log(finalImageUrl)
       }
 
       // ----------------------------------------------------
@@ -85,7 +86,6 @@ export default function AdminProductPage() {
         price: parseInt(productPrice) || 0,
         origin: productOrigin,
         weight: productWeight || null,
-        // 누락된 필수 Prisma 필드 값 설정 (default 값이 있으나 명시적으로 전송)
         stock: 0,
         shippingFee: parseInt("3500") || 3500, // 상태 미추가로 임시 하드코딩
         shippingMethod: "택배",
@@ -169,31 +169,7 @@ export default function AdminProductPage() {
           </div>
 
           {/* 상품 이미지 파일 */}
-          {/* <div className="space-y-2">
-            <label
-              htmlFor="productImage"
-              className="block text-sm font-medium text-gray-700"
-            >
-              상품 이미지 업로드
-            </label>
-            <input
-              id="productImage"
-              type="file"
-              onChange={handleImageChange}
-              accept="image/*"
-              className="mt-1 block w-full text-sm text-gray-500
-                file:mr-4 file:py-2 file:px-4
-                file:rounded-full file:border-0
-                file:text-sm file:font-semibold
-                file:bg-blue-50 file:text-blue-700
-                hover:file:bg-blue-100"
-            />
-            {productImage && (
-              <p className="text-xs text-gray-500 mt-1">
-                선택된 파일: {productImage.name}
-              </p>
-            )}
-          </div> */}
+       
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* 상품 가격 */}
@@ -252,16 +228,6 @@ export default function AdminProductPage() {
             </div>
           </div>
 
-          {/* 등록 버튼 */}
-          {/* <div className="pt-4">
-            <button
-              type="submit"
-              className="w-full justify-center py-3 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out"
-            >
-              상품 등록하기
-            </button>
-          </div>
-        </form> */}
 
           {/* ... (상품명, 상품정보 등 기존 필드 유지) ... */}
 
@@ -293,11 +259,11 @@ export default function AdminProductPage() {
                 <p className="text-xs font-semibold mb-2">
                   선택된 파일 미리보기:
                 </p>
-                [Image of the product image]
-                <Image
+
+                <img
                   src={imageUrlPreview}
                   alt="상품 이미지 미리보기"
-                  className="mt-2 max-w-full h-auto max-h-60 object-contain rounded-md shadow-md"
+                  className="w-64 mt-2 max-w-full h-auto max-h-60 object-contain rounded-md shadow-md"
                 />
                 {productImageFile && (
                   <p className="text-xs text-gray-500 mt-2">

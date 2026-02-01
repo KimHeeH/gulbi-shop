@@ -5,13 +5,14 @@ export default async function MyOrderPage() {
   const orders: OrderWithItems[] = await fetchOrderItem();
 
   if (!orders || orders.length === 0) {
-    return (
+    return (     <div className="p-10"> <BackButton />
+
       <div className="flex flex-col items-center justify-center min-h-[60vh] bg-white text-center">
         <div className="text-gray-200 text-7xl mb-4">📄</div>
         <h1 className="text-xl font-medium text-gray-500">
           접수된 주문 내역이 없습니다.
         </h1>
-      </div>
+      </div></div>  
     );
   }
 

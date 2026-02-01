@@ -46,7 +46,11 @@ export default function LoginPage() {
     setLoginErrorMessage("");
     setIsKakaoLoading(true);
     try {
-      await signIn("kakao", { redirect: true });
+      // 로그인 성공 후 /my 페이지로 리다이렉트
+      await signIn("kakao", { 
+        redirect: true,
+        callbackUrl: "/my" 
+      });
     } catch {
       setLoginErrorMessage("일시적인 오류가 발생했습니다. 다시 시도해주세요.");
     } finally {

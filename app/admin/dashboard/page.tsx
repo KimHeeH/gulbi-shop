@@ -32,6 +32,7 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+     
       <div className="flex h-screen">
         {/* 사이드바 */}
         <aside className="w-64 bg-[#1f2937] text-white flex flex-col gap-8 py-8 px-6 shadow-lg">

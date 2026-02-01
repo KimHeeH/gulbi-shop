@@ -109,8 +109,17 @@ export const authOptions: NextAuthOptions = {
     },
 
     async redirect({ url, baseUrl }) {
-      return url.startsWith(baseUrl) ? url : baseUrl;
+      // ✅ "/my" 같은 상대경로 허용
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+    
+      // ✅ 같은 origin 허용
+      if (url.startsWith(baseUrl)) return url;
+    
+      // ✅ 외부 도메인은 막고 baseUrl로
+      return baseUrl;
     },
+    
+    
   },
 };
 

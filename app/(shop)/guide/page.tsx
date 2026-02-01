@@ -81,6 +81,22 @@ export default function FisheryGuidePage() {
             </li>
           </ol>
         </section>
+        <div className="mx-auto max-w-3xl text-center text-xs leading-6 text-gray-500">
+            <p className="font-medium text-gray-600">
+              상호명 :창근수산 | 대표: 강보금
+            </p>
+            <p>
+              사업자등록번호: [000-00-00000] | 통신판매업신고:
+              [제0000-지역-0000호]
+            </p>
+            <p>
+              주소: 전라남도 영광군 영광읍 신남로3길 15-8 | 고객센터:
+              010-3012-8435 | 이메일: cgair1@naver.com
+            </p>
+            <p className="mt-2">
+              © {new Date().getFullYear()} 창근수산. All rights reserved.
+            </p>
+          </div>
       </main>
 
       <div className="p-8 text-center text-xs text-gray-400">감사합니다.</div>

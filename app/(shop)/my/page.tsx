@@ -1,10 +1,12 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { LogOut, ShoppingBag, UserMinus, ChevronRight } from "lucide-react";
+import { ShoppingBag, UserMinus, ChevronRight } from "lucide-react";
 import LogoutButton from "@/components/LogoutButton";
 import Link from "next/link";
+
 export const revalidate = 0;
+
 export default async function MyPage() {
   const session = await getServerSession(authOptions);
   if (!session) {
@@ -22,7 +24,9 @@ export default async function MyPage() {
             {user?.name?.[0] || "U"}
           </div>
           <div>
-            <h2 className="text-xl font-bold text-gray-900">{user?.name}님</h2>
+            <h2 className="text-xl font-bold text-gray-900">
+              {user?.name}님
+            </h2>
             <p className="text-sm text-gray-500">{user?.email}</p>
           </div>
         </div>
@@ -52,7 +56,6 @@ export default async function MyPage() {
           계정 관리
         </h3>
 
-        {/* 로그아웃 버튼 (Client Component) */}
         <LogoutButton />
 
         <button className="w-full flex items-center justify-between px-5 py-4 hover:bg-gray-50 border-t border-gray-50 text-red-500">
@@ -61,6 +64,47 @@ export default async function MyPage() {
             <span className="font-medium">회원탈퇴</span>
           </div>
         </button>
+      </div>
+
+      {/* 4. 고객지원 · 정책 ✅ 추가된 부분 */}
+      <div className="mt-4 bg-white border-y">
+        <h3 className="px-5 py-4 text-xs font-bold text-gray-400 uppercase tracking-wider">
+          고객지원 · 정책
+        </h3>
+
+        <Link
+          href="/guide"
+          className="flex items-center justify-between px-5 py-4 hover:bg-gray-50 border-t border-gray-50 transition-colors"
+        >
+          <span className="font-medium text-gray-800">이용안내</span>
+          <ChevronRight size={18} className="text-gray-300" />
+        </Link>
+
+        <Link
+          href="/terms"
+          className="flex items-center justify-between px-5 py-4 hover:bg-gray-50 border-t border-gray-50 transition-colors"
+        >
+          <span className="font-medium text-gray-800">이용약관</span>
+          <ChevronRight size={18} className="text-gray-300" />
+        </Link>
+
+        <Link
+          href="/privacy"
+          className="flex items-center justify-between px-5 py-4 hover:bg-gray-50 border-t border-gray-50 transition-colors"
+        >
+          <span className="font-medium text-gray-800">
+            개인정보처리방침
+          </span>
+          <ChevronRight size={18} className="text-gray-300" />
+        </Link>
+
+        <Link
+          href="/contact"
+          className="flex items-center justify-between px-5 py-4 hover:bg-gray-50 border-t border-gray-50 transition-colors"
+        >
+          <span className="font-medium text-gray-800">문의하기</span>
+          <ChevronRight size={18} className="text-gray-300" />
+        </Link>
       </div>
 
       <p className="text-center text-[11px] text-gray-300 mt-8">

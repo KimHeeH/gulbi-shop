@@ -144,7 +144,7 @@ export default function HomeClient({ products, error }: HomeClientProps) {
       {/* ✅ Footer / 하단 정보 영역 */}
       <footer
         aria-label="하단 정보"
-        className="border-t border-gray-100 pt-10 pb-14"
+        className="hidden lg:block border-t border-gray-100 pt-10 pb-14"
       >
         <div className="flex flex-col gap-8">
           {/* 링크 영역 */}

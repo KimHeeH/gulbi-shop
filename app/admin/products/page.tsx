@@ -20,7 +20,7 @@ export default async function AdminProductPage() {
           </div>
 
           <Link
-            href="/admin/products/new"
+            href="/admin/products/register"
             className="inline-flex items-center gap-2 bg-black text-white px-6 py-3 rounded-lg font-bold hover:bg-gray-800 transition-all active:scale-95 shadow-lg"
           >
             <Plus size={18} />

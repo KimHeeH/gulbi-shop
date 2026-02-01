@@ -86,9 +86,9 @@ export default function Header() {
                 <h2 className="text-lg font-bold text-gray-900 leading-tight">
                   {session ? `${session.user.name}님` : "로그인이 필요합니다"}
                 </h2>
-                <p className="text-xs text-gray-500 mt-1">
-                  {session?.user?.email || "미다감에 오신 것을 환영해요"}
-                </p>
+                <div className="text-xs text-gray-500 mt-1">
+                  {session?.user?.email || <div>창근수산에 오신 것을 <br/>환영해요</div>}
+                </div>
               </div>
             </div>
             <button
@@ -163,8 +163,9 @@ export default function Header() {
           {" "}
           <Link href="/">
             <Image
-              src="/shoplogo (7).png"
+              src="/shoplogo.svg"
               alt="Gulbi Shop Logo"
+              priority
               width={120}
               height={80}
               className="object-contain w-40 h-24 lg:w-64 lg:h-44"
@@ -195,7 +196,7 @@ export default function Header() {
           <li className="text-[#4A4A4A] hover:text-[#222222]">
             <Link href="/brand">브랜드 소개</Link>
           </li>
-          <li className="text-[#4A4A4A] hover:text-[#222222]">
+          <li className="text-[#4A4A4A] hover:text-[#222222]"  >
             <Link href="/products">전체 상품</Link>
           </li>
           <li className="text-[#4A4A4A] hover:text-[#222222]">
