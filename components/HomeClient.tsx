@@ -1,4 +1,5 @@
 "use client";
+export const dynamic = "force-dynamic";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";

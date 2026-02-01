@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { fetchOrderItem, OrderWithItems } from "@/lib/data";
 import BackButton from "@/components/BackButton";
 

@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { fetchAllProducts } from "@/lib/data";
 import ProductCard from "@/components/ProductCard";
 export const revalidate = 0;

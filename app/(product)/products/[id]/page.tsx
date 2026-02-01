@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { fetchGetProductData } from "@/lib/data";
 import Image from "next/image";
 import { notFound } from "next/navigation";
