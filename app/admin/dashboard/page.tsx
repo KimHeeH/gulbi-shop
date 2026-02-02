@@ -208,31 +208,5 @@ export default function AdminDashboardPage() {
   );
 }
 
-  const menuItems = [
-    {
-      key: "orders",
-      label: "주문 관리",
-      href: "/admin/orders",
-      icon: "/icons/shopping-bag.svg",
-    },
-    {
-      key: "register-products",
-      label: "상품 등록",
-      href: "/admin/products/register",
-      icon: "/icons/product.svg",
-    },
-    {
-      key: "products",
-      label: "상품 목록",
-      href: "/admin/products",
-      icon: "/icons/product.svg",
-    },
-    {
-      key: "pages",
-      label: "홈페이지 바로가기기",
-      href: "/",
-      icon: "/icons/product.svg",
-    },
-  ];
 
 
