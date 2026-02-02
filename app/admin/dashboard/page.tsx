@@ -2,6 +2,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { X } from "lucide-react";
+
 export default function AdminDashboardPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuItems = [
@@ -49,11 +51,13 @@ export default function AdminDashboardPage() {
       <div className="flex justify-between items-center">
         <span className="font-semibold text-lg">관리자 메뉴</span>
         <button
-          onClick={() => setIsMenuOpen(false)}
-          className="text-white/70"
-        >
-          ✕
-        </button>
+  onClick={() => setIsMenuOpen(false)}
+  className="text-white/70 hover:text-white transition"
+  aria-label="메뉴 닫기"
+>
+  <X size={22} />
+</button>
+
       </div>
 
       <nav className="flex flex-col gap-2">
