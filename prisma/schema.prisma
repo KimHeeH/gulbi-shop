@@ -1,21 +1,16 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
-enum UserRole {
-  User
-  Admin
-}
-
 model User {
-  id      String     @id @default(cuid())
-  kakaoId   String?     @unique
-  password String?
+  id        String     @id @default(cuid())
+  kakaoId   String?    @unique
+  password  String?
   name      String?
   email     String?    @unique
   image     String?
@@ -23,40 +18,25 @@ model User {
   updatedAt DateTime   @updatedAt
   role      UserRole   @default(User)
   cartItems CartItem[]
-  orders  Order[]
+  orders    Order[]
 }
 
-// prisma/schema.prisma 파일에 추가
-
 model Product {
-  // 1. 상품 고유 식별자
-  id        String      @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // 2. 기본 정보
-  name String @db.VarChar(100) // 상품명: "특장대(오구10미)"
-
-  // 3. 상품 이미지 (이미지 파일명 또는 URL)
-  imageUrl String? @db.VarChar(255) // 상품 대표 이미지
-
-  // 4. 상품 상세 정보
-  description String? @db.Text // 
-
-  // 5. 가격 및 재고 정보
-  price Int // 판매가: 100000
-  stock Int @default(0) // 재고 수량
-
-  // 6. 배송 정보
-  origin         String  @db.VarChar(50) // 원산지: "국내"
-  weight         String? @db.VarChar(50) // 중량: "1.7kg / 10마리"
-  shippingFee    Int     @default(3500) // 배송비: 3500원
-  shippingMethod String  @default("택배") @db.VarChar(50) // 배송 방법: "택배"
-
-  // 7. 최소 주문 수량
-  minOrderQty Int        @default(1) // 최소 주문 수량: 1개
-  CartItem    CartItem[]
-  orderItems OrderItem[]
+  id             String      @id @default(cuid())
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  name           String      @db.VarChar(100)
+  imageUrl       String?     @db.VarChar(255)
+  description    String?
+  price          Int
+  stock          Int         @default(0)
+  origin         String      @db.VarChar(50)
+  weight         String?     @db.VarChar(50)
+  shippingFee    Int         @default(3500)
+  shippingMethod String      @default("택배") @db.VarChar(50)
+  minOrderQty    Int         @default(1)
+  CartItem       CartItem[]
+  orderItems     OrderItem[]
 }
 
 model CartItem {
@@ -65,36 +45,38 @@ model CartItem {
   productId String
   quantity  Int      @default(1)
   createdAt DateTime @default(now())
-
-  product Product @relation(fields: [productId], references: [id])
-  user    User    @relation(fields: [userId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 }
+
 model Order {
   id           String      @id @default(cuid())
-  imp_uid      String      
-  merchant_uid String      @unique 
-  
+  imp_uid      String
+  merchant_uid String      @unique
   totalPrice   Int
   buyerName    String
   buyerTel     String
   address      String
-  status       String      @default("PAID") 
+  status       String      @default("PAID")
   createdAt    DateTime    @default(now())
-  
   userId       String
-
+  orderItems   OrderItem[]
   user         User        @relation(fields: [userId], references: [id])
 
-  orderItems   OrderItem[]
   @@map("orders")
 }
 
 model OrderItem {
   id        String  @id @default(cuid())
   orderId   String
-  order     Order   @relation(fields: [orderId], references: [id])
   productId String
-  product   Product @relation(fields: [productId], references: [id])
   quantity  Int
   price     Int
+  order     Order   @relation(fields: [orderId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+enum UserRole {
+  User
+  Admin
 }

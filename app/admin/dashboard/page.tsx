@@ -34,9 +34,19 @@ export default function AdminDashboardPage() {
     <div className="min-h-screen bg-gray-50">
      
       <div className="flex h-screen">
-        {/* 사이드바 */}
-        <aside className="w-64 bg-[#1f2937] text-white flex flex-col gap-8 py-8 px-6 shadow-lg">
-          <div className="flex items-center gap-3">
+      {/* 모바일 관리자 헤더 */}
+<div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-[#1f2937] text-white h-14 flex items-center justify-between px-4 shadow">
+  <span className="font-semibold">관리자 대시보드</span>
+  <Link
+    href="/admin"
+    className="text-sm px-3 py-1 rounded bg-white/10"
+  >
+    메뉴
+  </Link>
+</div>
+
+        <aside className="hidden md:flex w-64 bg-[#1f2937] text-white flex-col gap-8 py-8 px-6 shadow-lg">
+        <div className="flex items-center gap-3">
             <Image
               src="/icons/Profile.svg"
               alt="프로필 아이콘"
@@ -66,8 +76,8 @@ export default function AdminDashboardPage() {
         </aside>
 
         {/* 메인 컨텐츠 */}
-        <main className="flex-1 px-8 py-10 overflow-auto">
-          <div className="flex items-center justify-between mb-8">
+        <main className="flex-1 px-4 md:px-8 py-6 md:py-10 overflow-auto pt-16 md:pt-10">
+        <div className="flex items-center justify-between mb-8">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">
                 관리자 대시보드
@@ -93,8 +103,8 @@ export default function AdminDashboardPage() {
           </div>
 
           {/* 카드형 정보 영역 - 더미 값, 실제 데이터로 교체 가능 */}
-          <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {[
+          <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
+          {[
               { title: "오늘 주문", value: "24건", desc: "전일 대비 +8건" },
               { title: "주문 처리 대기", value: "7건", desc: "출고 처리 필요" },
               { title: "재고 부족 상품", value: "3개", desc: "입고 알림 확인" },
