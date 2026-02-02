@@ -121,11 +121,9 @@ export default function AdminDashboardPage() {
 
         {/* 메인 컨텐츠 */}
         <main className="flex-1 px-4 md:px-8 py-6 md:py-10 overflow-auto pt-16 md:pt-10">
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col lg:flex-row items-center justify-between mb-8">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">
-                관리자 대시보드
-              </h1>
+         
               <p className="text-sm text-gray-500 mt-1">
                 핵심 지표와 주요 작업을 한눈에 확인하세요.
               </p>
@@ -135,7 +133,7 @@ export default function AdminDashboardPage() {
                 href="/(admin)/orders"
                 className="px-4 py-2 bg-gray-900 text-white rounded-lg text-sm hover:bg-gray-800 transition-colors"
               >
-                새 주문 확인
+                주문 확인
               </Link>
               <Link
                 href="/products"
@@ -147,24 +145,7 @@ export default function AdminDashboardPage() {
           </div>
 
           {/* 카드형 정보 영역 - 더미 값, 실제 데이터로 교체 가능 */}
-          <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
-          {[
-              { title: "오늘 주문", value: "24건", desc: "전일 대비 +8건" },
-              { title: "주문 처리 대기", value: "7건", desc: "출고 처리 필요" },
-              { title: "재고 부족 상품", value: "3개", desc: "입고 알림 확인" },
-            ].map((card) => (
-              <div
-                key={card.title}
-                className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm hover:shadow-md transition-shadow"
-              >
-                <div className="text-sm text-gray-500 mb-2">{card.title}</div>
-                <div className="text-2xl font-semibold text-gray-900">
-                  {card.value}
-                </div>
-                <div className="text-sm text-gray-600 mt-1">{card.desc}</div>
-              </div>
-            ))}
-          </section>
+     
 
           {/* 작업 바로가기 */}
           <section className="mt-10">
