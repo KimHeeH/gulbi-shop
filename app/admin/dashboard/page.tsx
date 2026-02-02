@@ -79,7 +79,7 @@ export default function AdminDashboardPage() {
 )}
 
 <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-[#1f2937] text-white h-14 flex items-center justify-between px-4 shadow">
-  <span className="font-semibold">관리자 대시보드</span>
+  <span className="hidden md:block font-semibold">관리자 대시보드</span>
   <button
   onClick={() => setIsMenuOpen(true)}
   className="text-sm px-3 py-1 rounded bg-white/10"
@@ -122,22 +122,22 @@ export default function AdminDashboardPage() {
         {/* 메인 컨텐츠 */}
         <main className="flex-1 px-4 md:px-8 py-6 md:py-10 overflow-auto pt-16 md:pt-10">
         <div className="flex flex-col lg:flex-row items-center justify-between mb-8">
-            <div>
-         
-              <p className="text-sm text-gray-500 mt-1">
-                핵심 지표와 주요 작업을 한눈에 확인하세요.
-              </p>
-            </div>
-            <div className="flex items-center gap-3">
+        <div>
+    <h1 className="text-2xl font-bold text-gray-900">관리자 대시보드</h1> {/* 제목 추가됨 */}
+    <p className="text-sm text-gray-500 mt-1">
+      핵심 지표와 주요 작업을 한눈에 확인하세요.
+    </p>
+  </div>
+            <div className="flex items-center gap-3 w-full lg:w-auto">
               <Link
                 href="/(admin)/orders"
-                className="px-4 py-2 bg-gray-900 text-white rounded-lg text-sm hover:bg-gray-800 transition-colors"
+                className="lg:flex-none flex-1 px-4 py-2 bg-gray-900 text-white rounded-lg text-sm hover:bg-gray-800 transition-colors"
               >
                 주문 확인
               </Link>
               <Link
                 href="/products"
-                className="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-800 hover:bg-gray-100 transition-colors"
+                className="lg:flex-none flex-1 px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-800 hover:bg-gray-100 transition-colors"
               >
                 상품 등록
               </Link>
