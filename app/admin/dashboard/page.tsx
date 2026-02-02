@@ -1,8 +1,9 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
-
-// 💡 관리자 대시보드: 좌측 사이드바 + 우측 주요 카드 UI
+import { useState } from "react";
 export default function AdminDashboardPage() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuItems = [
     {
       key: "orders",
@@ -34,15 +35,58 @@ export default function AdminDashboardPage() {
     <div className="min-h-screen bg-gray-50">
      
       <div className="flex h-screen">
-      {/* 모바일 관리자 헤더 */}
+{/* 모바일 메뉴 Drawer */}
+{isMenuOpen && (
+  <div className="fixed inset-0 z-50 md:hidden">
+    {/* 배경 오버레이 */}
+    <div
+      className="absolute inset-0 bg-black/40"
+      onClick={() => setIsMenuOpen(false)}
+    />
+
+    {/* 메뉴 패널 */}
+    <aside className="relative w-64 h-full bg-[#1f2937] text-white p-6 flex flex-col gap-6">
+      <div className="flex justify-between items-center">
+        <span className="font-semibold text-lg">관리자 메뉴</span>
+        <button
+          onClick={() => setIsMenuOpen(false)}
+          className="text-white/70"
+        >
+          ✕
+        </button>
+      </div>
+
+      <nav className="flex flex-col gap-2">
+        {menuItems.map((item) => (
+          <Link
+            key={item.key}
+            href={item.href}
+            onClick={() => setIsMenuOpen(false)}
+            className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-white/10"
+          >
+            <Image
+              src={item.icon}
+              alt={item.label}
+              width={20}
+              height={20}
+            />
+            <span>{item.label}</span>
+          </Link>
+        ))}
+      </nav>
+    </aside>
+  </div>
+)}
+
 <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-[#1f2937] text-white h-14 flex items-center justify-between px-4 shadow">
   <span className="font-semibold">관리자 대시보드</span>
-  <Link
-    href="/admin"
-    className="text-sm px-3 py-1 rounded bg-white/10"
-  >
-    메뉴
-  </Link>
+  <button
+  onClick={() => setIsMenuOpen(true)}
+  className="text-sm px-3 py-1 rounded bg-white/10"
+>
+  메뉴
+</button>
+
 </div>
 
         <aside className="hidden md:flex w-64 bg-[#1f2937] text-white flex-col gap-8 py-8 px-6 shadow-lg">
@@ -163,3 +207,32 @@ export default function AdminDashboardPage() {
     </div>
   );
 }
+
+  const menuItems = [
+    {
+      key: "orders",
+      label: "주문 관리",
+      href: "/admin/orders",
+      icon: "/icons/shopping-bag.svg",
+    },
+    {
+      key: "register-products",
+      label: "상품 등록",
+      href: "/admin/products/register",
+      icon: "/icons/product.svg",
+    },
+    {
+      key: "products",
+      label: "상품 목록",
+      href: "/admin/products",
+      icon: "/icons/product.svg",
+    },
+    {
+      key: "pages",
+      label: "홈페이지 바로가기기",
+      href: "/",
+      icon: "/icons/product.svg",
+    },
+  ];
+
+
