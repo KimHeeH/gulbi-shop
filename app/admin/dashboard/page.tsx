@@ -93,7 +93,7 @@ export default function AdminDashboardPage() {
 
 </div>
 
-        <aside className="hidden md:flex w-64 bg-[#1f2937] text-white flex-col gap-8 py-8 px-6 shadow-lg">
+        <aside className=" w-64 bg-[#1f2937] text-white flex-col gap-8 py-8 px-6 shadow-lg">
         <div className="flex items-center gap-3">
             <Image
               src="/icons/Profile.svg"
@@ -125,13 +125,13 @@ export default function AdminDashboardPage() {
 
         {/* 메인 컨텐츠 */}
         <main className="flex-1 px-4 md:px-8 py-6 md:py-10 overflow-auto pt-16 md:pt-10">
-        <div className="flex flex-col lg:flex-row items-center justify-between mb-8">
-        <div>
-    <h1 className="text-2xl font-bold text-gray-900">관리자 대시보드</h1> {/* 제목 추가됨 */}
-    <p className="text-sm text-gray-500 mt-1">
-      핵심 지표와 주요 작업을 한눈에 확인하세요.
-    </p>
-  </div>
+        <div className="flex flex-col lg:flex-row justify-between mb-8">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">관리자 대시보드</h1>
+            <p className="text-sm text-gray-500 mt-1">
+              핵심 지표와 주요 작업을 한눈에 확인하세요.
+            </p>
+          </div>
             <div className="flex items-center gap-3 w-full lg:w-auto">
               <Link
                 href="/(admin)/orders"
