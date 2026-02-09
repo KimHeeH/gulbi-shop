@@ -17,6 +17,7 @@ export async function fetchAllProducts() {
         shippingFee: true,
         shippingMethod: true,
         minOrderQty: true,
+        category: true,
       },
       orderBy: {
         createdAt: "desc",

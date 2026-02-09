@@ -9,4 +9,11 @@ export interface Product {
   shippingFee: number;
   shippingMethod: string;
   minOrderQty: number;
+  category: Category;
+}
+export enum Category {
+  GULBI_10 = "GULBI_10",
+  GULBI_20 = "GULBI_20",
+  BARLEY_GULBI = "BARLEY_GULBI",
+  FERMENTED_ETC = "FERMENTED_ETC",
 }

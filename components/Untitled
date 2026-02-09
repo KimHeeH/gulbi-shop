@@ -1,0 +1,6 @@
+const categoryFilters = [
+  { key: "GULBI_10", label: "10미 굴비" },
+  { key: "GULBI_20", label: "20미 굴비" },
+  { key: "BARLEY_GULBI", label: "보리 굴비" },
+  { key: "FERMENTED_ETC", label: "홍어 · 기타" }, // 확장성을 위해 추가
+];

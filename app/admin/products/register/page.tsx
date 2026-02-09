@@ -14,11 +14,19 @@ export default function AdminProductPage() {
   const [productImageFile, setProductImageFile] = useState<File | null>(null); // File 객체
   const [imageUrlPreview, setImageUrlPreview] = useState<string | null>(null); // 미리보기 URL (Blob URL 또는 Data URL)
   const [isUploading, setIsUploading] = useState(false); // 로딩 상태 추가
+  // 상단 State 선언부
+const [productCategory, setProductCategory] = useState("");
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const handleBack = () => {
     router.back();
   };
+  const categoryFilters = [
+    { key: "GULBI_10", label: "10미 굴비" },
+    { key: "GULBI_20", label: "20미 굴비" },
+    { key: "BARLEY_GULBI", label: "보리 굴비" },
+    { key: "FERMENTED_ETC", label: "홍어 · 기타" }, // 확장성을 위해 추가
+  ];
   // 이미지 파일을 선택했을 때 미리보기 URL을 생성하는 핸들러
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -92,6 +100,7 @@ export default function AdminProductPage() {
         shippingFee: parseInt("3500") || 3500, // 상태 미추가로 임시 하드코딩
         shippingMethod: "택배",
         minOrderQty: 1,
+        category: productCategory,
       };
 
       const dbResponse = await fetch("/api/admin/products", {
@@ -227,6 +236,29 @@ export default function AdminProductPage() {
                 placeholder="예: 500g 또는 2kg"
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               />
+            </div>
+
+            {/* 상품 카테고리 */}
+            <div className="space-y-2">
+              <label
+                htmlFor="productCategory"
+                className="block text-sm font-medium text-gray-700"
+              >
+                카테고리 <span className="text-red-500">*</span>
+              </label>
+              <select 
+         name="category" 
+        required // HTML5 기본 유효성 검사 추가
+        defaultValue="" // 초기값을 빈 문자열로 설정
+        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+>
+  <option value="" disabled>카테고리를 선택해주세요</option>
+  {categoryFilters.map((cat) => (
+    <option key={cat.key} value={cat.key} onChange={(e) => setProductCategory(e.target.value)}>
+      {cat.label}
+    </option>
+  ))}
+</select>
             </div>
           </div>
 

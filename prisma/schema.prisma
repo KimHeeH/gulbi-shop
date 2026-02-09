@@ -6,6 +6,13 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+enum Category {
+  GULBI_10
+  GULBI_20
+  BARLEY_GULBI
+  FERMENTED_ETC
+}
+
 
 model User {
   id        String     @id @default(cuid())
@@ -35,6 +42,7 @@ model Product {
   shippingFee    Int         @default(3500)
   shippingMethod String      @default("택배") @db.VarChar(50)
   minOrderQty    Int         @default(1)
+  category Category 
   CartItem       CartItem[]
   orderItems     OrderItem[]
 }

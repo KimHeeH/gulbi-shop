@@ -80,6 +80,7 @@ export async function POST(request: Request) {
         stock: body.stock !== undefined ? Math.floor(body.stock) : 0,
         origin: body.origin?.trim() || "국내",
         weight: body.weight?.trim() || null,
+        category: body.category?.trim() || "GULBI_10",
         shippingFee:
           body.shippingFee !== undefined ? Math.floor(body.shippingFee) : 3500,
         shippingMethod: body.shippingMethod?.trim() || "택배",
