@@ -19,7 +19,7 @@ export default function CartList({
     (acc, item) => acc + item.product.price * item.quantity,
     0
   );
-  const shippingFee = subtotal > 0 ? 3500 : 0;
+  const shippingFee = subtotal > 0 ? 4500 : 0;
   const totalPrice = subtotal + shippingFee;
 
   const handleOrder = () => {

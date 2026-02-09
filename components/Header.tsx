@@ -83,11 +83,11 @@ export default function Header() {
                 <User size={24} className="text-gray-400" />
               </div>
               <div>
-                <h2 className="text-lg font-bold text-gray-900 leading-tight">
+                <h2 className="text-sm font-bold text-gray-900 leading-tight">
                   {session ? `${session.user.name}님` : "로그인이 필요합니다"}
                 </h2>
-                <div className="text-xs text-gray-500 mt-1">
-                  {session?.user?.email || <div>창근수산에 오신 것을 <br/>환영해요</div>}
+                <div className="text-xs text-gray-500 mt-3">
+                  {session?.user?.email || <div>환영합니다.</div>}
                 </div>
               </div>
             </div>

@@ -24,22 +24,22 @@ const bannerItems = [
     title: "정성과 사랑이 가득 담긴",
     subtitle: "명품 굴비 전문점",
     description:
-      "가족이 먹는다는 마음으로 최상의 굴비만 준비했습니다. 풍미를 살린 정직한 굴비를 만나보세요.",
-    imageSrc: "/banners/main-3.jpg",
+      "풍미를 살린 굴비를 만나보세요.",
+    imageSrc: "/banners/main-1_temp.png",
   },
   {
     id: "microwave",
     title: "전자레인지로 간편하게!",
     subtitle: "2분 땡 찐보리굴비",
     description:
-      "비린내 없이 촉촉함 그대로, 간편 조리로 집에서도 맛있게 즐겨보세요.",
+      "비린내 없이 촉촉함 그대로 즐겨보세요.",
     imageSrc: "/banners/main-4.png",
   },
 ];
 
 // 2. '전체보기'를 위해 ALL 키를 포함한 필터 목록
 const categoryFilters = [
-  { key: "ALL", label: "전체보기" },
+  { key: "ALL", label: "전체" },
   { key: "GULBI_10", label: "10미 굴비" },
   { key: "GULBI_20", label: "20미 굴비" },
   { key: "BARLEY_GULBI", label: "보리 굴비" },
@@ -113,23 +113,31 @@ export default function HomeClient({ products, error }: HomeClientProps) {
           </h2>
         </div>
 
-        {/* 4. 카테고리 네비게이션: 클릭 이벤트와 스타일 처리 */}
-        <nav aria-label="상품 카테고리" className="flex flex-wrap justify-center gap-3">
-          {categoryFilters.map((category) => (
-            <button
-              key={category.key}
-              onClick={() => setActiveCategory(category.key)}
-              className={`text-xs px-4 py-2 border rounded-full lg:text-sm font-medium transition-all duration-200 ${
-                activeCategory === category.key
-                  ? "bg-[#3C2F21] text-white border-[#3C2F21] shadow-md"
-                  : "bg-white text-gray-700 border-gray-200 hover:bg-[#F5F5F5] hover:border-gray-300"
-              }`}
-              type="button"
-            >
-              {category.label}
-            </button>
-          ))}
-        </nav>
+        <nav 
+  aria-label="상품 카테고리" 
+  /* 1. flex-nowrap: 줄바꿈 금지
+     2. overflow-x-auto: 가로 스크롤 허용
+     3. scrollbar-hide: 스크롤바 숨기기 (선택사항)
+  */
+  className="flex flex-nowrap overflow-x-auto gap-2 px-4 py-2 -mx-4 no-scrollbar"
+>
+  {categoryFilters.map((category) => (
+    <button
+      key={category.key}
+      onClick={() => setActiveCategory(category.key)}
+      /* whitespace-nowrap: 버튼 안의 글자가 밑으로 떨어지지 않게 고정
+      */
+      className={`whitespace-nowrap text-xs px-5 py-2.5 border rounded-full lg:text-sm font-medium transition-all duration-200 ${
+        activeCategory === category.key
+          ? "bg-[#3C2F21] text-white border-[#3C2F21] shadow-md"
+          : "bg-white text-gray-700 border-gray-200 hover:bg-[#F5F5F5]"
+      }`}
+      type="button"
+    >
+      {category.label}
+    </button>
+  ))}
+</nav>
 
         {/* 5. 필터링된 상품 리스트 렌더링 */}
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -81,7 +81,7 @@ export default function ProductActions({
       </div>
 
       {/* 모바일 구매 버튼 */}
-      <div className="flex lg:hidden gap-3 fixed bottom-20 left-0 right-0 p-4 bg-white border-t border-gray-100 z-40">
+      <div className="flex lg:hidden gap-3 fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-100 z-40">
         <button
           onClick={() => setIsDrawerOpen(true)}
           className="w-full py-4 bg-gray-900 text-white rounded-xl font-bold text-lg hover:bg-gray-800"
@@ -184,7 +184,7 @@ export default function ProductActions({
             )}
 
             {/* 최종 액션 버튼 */}
-            <div className="flex w-full gap-3 mt-6">
+            <div className="flex w-full gap-3 mt-10">
               <button
                 onClick={handleAddToCart}
                 className="flex-1 py-4 border rounded-xl font-bold text-gray-700"

@@ -45,7 +45,6 @@ export default function ProductCard({ product }: ProductCardProps) {
               {product.price.toLocaleString()}원
             </span>
             {/* 할인율이 필요 없다면 이 줄은 삭제하세요 */}
-            <span className="text-xs font-bold text-red-500">10%</span>
           </div>
 
           {/* 설명을 한 줄로 제한하거나 아예 삭제해서 높이를 줄임 */}

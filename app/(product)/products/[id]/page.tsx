@@ -46,13 +46,10 @@ export default async function ProductsPage({
           {/* 2. 정보 섹션 */}
           <section className="flex flex-col pt-2">
             <div className="mb-8">
-              <span className="text-xs font-bold tracking-widest text-gray-400 uppercase">
-                {product.origin || "Premium Selection"}
-              </span>
+            
               <h1 className="text-3xl md:text-4xl font-bold mt-2 tracking-tight">
                 {product.name}
               </h1>
-              <p className="text-gray-500 mt-1">{product.weight}</p>
 
               <div className="mt-6 flex items-baseline gap-1">
                 <span className="text-3xl font-bold">
@@ -64,13 +61,13 @@ export default async function ProductsPage({
 
             {/* 깔끔한 구분선 정보 리스트 */}
             <div className="border-t border-gray-100 py-8 space-y-6">
-              <div className="flex text-sm">
+              <div className="flex text-base lg:text-lg">
                 <span className="w-24 text-gray-400 font-medium">배송정보</span>
                 <span className="text-gray-700">
-                  무료배송 (3만원 이상 구매 시)
+                  4500원
                 </span>
               </div>
-              <div className="flex text-sm">
+              <div className="flex  text-base lg:text-lg">
                 <span className="w-24 text-gray-400 font-medium">상품설명</span>
                 <p className="flex-1 text-gray-600 leading-relaxed break-keep">
                   {product.description}
