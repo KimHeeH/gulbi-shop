@@ -1,3 +1,5 @@
+import { Category as PrismaCategory } from "@prisma/client";
+
 export interface Product {
   id: string;
   name: string;
@@ -9,11 +11,6 @@ export interface Product {
   shippingFee: number;
   shippingMethod: string;
   minOrderQty: number;
-  category: Category;
+  category: PrismaCategory; 
 }
-export enum Category {
-  GULBI_10 = "GULBI_10",
-  GULBI_20 = "GULBI_20",
-  BARLEY_GULBI = "BARLEY_GULBI",
-  FERMENTED_ETC = "FERMENTED_ETC",
-}
+
