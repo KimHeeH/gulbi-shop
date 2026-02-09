@@ -248,13 +248,16 @@ const [productCategory, setProductCategory] = useState("");
               </label>
               <select 
          name="category" 
-        required // HTML5 기본 유효성 검사 추가
+         onChange={(e) => {
+          const target = e.target as HTMLSelectElement;
+          setProductCategory(target.value);
+        }}        required // HTML5 기본 유효성 검사 추가
         defaultValue="" // 초기값을 빈 문자열로 설정
         className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
 >
   <option value="" disabled>카테고리를 선택해주세요</option>
   {categoryFilters.map((cat) => (
-    <option key={cat.key} value={cat.key} onChange={(e) => setProductCategory(e.target.value)}>
+    <option key={cat.key} value={cat.key}>
       {cat.label}
     </option>
   ))}
